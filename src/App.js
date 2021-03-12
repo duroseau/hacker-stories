@@ -18,31 +18,59 @@ const list = [
     objectID: 1,
   },
 ];
-function App() { 
- return (
-   <div>
-     <h1>My Hacker Stories</h1>
+// function App() { 
+//  return (
+//    <div>
+//      <h1>My Hacker Stories</h1>
 
-     <label htmlFor="search">Search: </label>
-     <input id="search" type="text" />
+//      <label htmlFor="search">Search: </label>
+//      <input id="search" type="text" />
 
-     <hr />
+//      <hr />
 
-     {list.map(function(item) {
-       return (
-         <div key={item.objectID}>
-           <span>
-             <a href={item.url}>{item.title}</a>
-           </span>
-           <span>{item.author}</span>
-           <span>{item.num_comments}</span>
-           <span>{item.points}</span>
-         {item.title}
-         </div>
-       )
-     })}  
-   </div>
+//      {list.map(function(item) {
+//        return (
+//          <div key={item.objectID}>
+//            <span>
+//              <a href={item.url}>{item.title}</a>
+//            </span>
+//            <span>{item.author}</span>
+//            <span>{item.num_comments}</span>
+//            <span>{item.points}</span>
+//          {item.title}
+//          </div>
+//        )
+//      })}  
+//    </div>
      
-     );
+//      );
+// }
+function List() {
+  return list.map(function(item) {
+    return (
+      <div key={item.objectID}>
+        <span>
+          <a href={item.url}>{item.title}</a>
+        </span>
+        <span>{item.author}</span>
+        <span>{item.num_comments}</span>
+        <span>{item.points}</span>
+      </div>
+    );
+  });
+}
+
+function App() {
+  return (
+    <div>
+      <h1> My Hacker Stories</h1>
+
+      <label htmlFor='search'>Search: </label>
+      <input id="serach"type='text' />
+
+      <hr />
+      <List />
+    </div>
+  )
 }
  export default App;
