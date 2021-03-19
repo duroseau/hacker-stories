@@ -1,5 +1,12 @@
 import React from 'react';
 
+const App = () => {
+  return (
+    <div>
+      good to go
+    </div>
+  )
+}
 const list = [
   {
     title: 'React',
@@ -60,17 +67,17 @@ function List() {
   });
 }
 
-function App() {
-  return (
-    <div>
-      <h1> My Hacker Stories</h1>
+// function App() {
+//   return (
+//     <div>
+//       <h1> My Hacker Stories</h1>
 
-      <label htmlFor='search'>Search: </label>
-      <input id="search"type='text' />
+//       <label htmlFor='search'>Search: </label>
+//       <input id="search"type='text' />
 
-      <hr />
-      <List />
-    </div>
-  )
-}
+//       <hr />
+//       <List />
+//     </div>
+//   )
+// }
  export default App;
