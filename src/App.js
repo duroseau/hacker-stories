@@ -66,7 +66,7 @@ function App() {
       <h1> My Hacker Stories</h1>
 
       <label htmlFor='search'>Search: </label>
-      <input id="serach"type='text' />
+      <input id="search"type='text' />
 
       <hr />
       <List />
