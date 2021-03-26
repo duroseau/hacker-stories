@@ -1,5 +1,16 @@
 import React from 'react';
 
+const initialStories = [
+  {
+  title: 'React',
+  ...
+  },
+  {
+    title: 'Redux'
+    ...
+  },
+];
+
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
   localStorage.getItem('key') || initialState
@@ -13,7 +24,13 @@ return [value, setValue];
 return [value, setValue]
 
 const App = () => {
-  const stories = [
+  const [stories, setStories] = React.useState(initialStories);
+    const handleRemoveStory = item => {
+      const newStories = stories.filter(
+        story => item.objectID !== story.objectID
+      );
+      setStories(newStories);
+    };
     {
       title: 'React',
       url: 'https://reactjs.org/',
@@ -68,11 +85,11 @@ const searchedStories = stories.filter(story =>
 
     <hr />
 
-    <List list={searchedStories} />
+    <List list={searchedStories} onRemoveItem={handleRemoveStory} />
   </div>
 
  );
-
+   };
 const Search = props => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const { search, onSearch } = props;
@@ -120,28 +137,38 @@ const Search = props => {
 };
 const list = {stories}
 
-const List = ({ list }) =>
+const List = ({ list, onRemoveItem }) =>
   list.map(item =>
     <Item
       key={item.objectID}
-      title={item.title}
+      item={item}
+      onRemoveItem={onRemoveItem}
       url={item.url}
       author={item.author}
       num_comments={item.num_comments}
       points={item.points}
     />);
 
-const Item = ({ title, url, author, num_comments, points }) => (
-  <div 
+const Item = ({ item, onRemoveItem }) => {
+  function handleRemoveItem = () => {
+    onRemoveItem(item);
+  };
+return (
+  <div> 
     <span>
       <a href={url}>{title}</a>
     </span>
     <span>{author}</span>
     <span>{num_comments}</span>
     <span>{points}</span>
+    <span>
+      <button type="button" onClick={onRemoveItem.bind(null, item)}>
+        Dismiss
+      </button> 
+    </span>
   </div >
-)
-    ));
+);
+};
 
 
 
