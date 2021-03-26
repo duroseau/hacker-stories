@@ -110,6 +110,12 @@ const App = () => {
   const [isError, setIaError] = React.useState(false);
 
   React.useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
+    const handleFetchStories = React.useCallback(() =>{
+
+    }
+    )
     if (searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT'});
