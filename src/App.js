@@ -162,8 +162,10 @@ const [url, setUrl] = React.useState(
 const handleSearchInput = event => {
   setSearchTerm(event.taget.value);
 };
-const handleSearchSubmit = () => {
+const handleSearchSubmit = event => {
   setUrl(`${API_ENDPOINT}${searchTerm}`);
+
+  event.preventDefault();
 };
 localStorage.setItem('search', event.target.value);
   };
@@ -171,11 +173,18 @@ localStorage.setItem('search', event.target.value);
 const searchedStories = stories.data.filter(story =>
   story.title.toLocaleLowerCase().includes(searchTerm.toLowerCase())
 
+
 );
 return (
   <div>
     <h1>My Hacker Stories</h1>
+    <SearchForm
+    searchTerm={searchTerm}
+    onSearchInput={handleSearchInput}
+    onSearchSubmit={handleSearchSubmit}
+    />
 
+    <form onSubmit={handleSearchSubmit}>
     <InputWithLabel
       id="search"
       label="search"
@@ -185,17 +194,10 @@ return (
     >
       <strong>Search:</strong>
     </InputWithLabel>
-    <button
-      type="button"
-      disabled={!searchTerm}
-      onClick={handleSearchSubmit}
-    >
+    <button type="button" disabled={!searchTerm}>
       submit
-    </button>
-    >
-
-
->
+     </button>
+    </form>
 
     <hr />
     {stories.isError && <p>Something went wrong ...</p>}
@@ -267,6 +269,26 @@ const List = ({ list, onRemoveItem }) =>
       num_comments={item.num_comments}
       points={item.points}
     />);
+    const SearchForm = ({
+      searchTerm,
+      onSearchInput,
+      onSearchSubmit,
+    }) => (
+      <form onSubmit={onSearchSubmit}>
+        <InputWithLabel
+        id="search"
+        value={searchTerm}
+        isFocused
+        onInputChange={onSearchInput}
+        >
+          <strong>Search</strong>
+        </InputWithLabel>
+
+        <button type="submit" disabled={!searchTerm}>
+          submit
+        </button>
+      </form>
+    );
 
 const Item = ({ item, onRemoveItem }) => {
   function handleRemoveItem = () => {
