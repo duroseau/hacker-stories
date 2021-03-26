@@ -54,8 +54,16 @@ const searchedStories = stories.filter(story =>
       label="search"
       value={searchTerm}
       onInputChange={handleSearch}
+    >
+      <strong>Search:</strong>
+    </InputWithLabel>
+    id='search'
+    value={searchTerm}
+    onInputChange={handleSearch}
+    >
 
-    // <Search search={searchTerm} on Search={handleSearch} />
+     <Search:
+      </InputWithLabel>
 
     <hr />
 
@@ -76,9 +84,15 @@ const Search = props => {
 
 
   return (
-    const InputWithLabel = ({ id, label, value, onInputChange }) => (
+    const InputWithLabel = ({
+       id,
+       value,
+       type='text',
+       onInputChange ,
+       children,
+      }) => (
       <>
-        <label htmlFor={id}>{label}: </label>
+        <label htmlFor={id}>{children}: </label>
         &nbsp;
         <input id={id},
           type={type},
