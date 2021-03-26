@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 const storiesReducer = (state, action) => {
   switch (action.type) {
@@ -120,7 +121,8 @@ const App = () => {
 
     dispatchStories({ type: 'STORIES_FETCH_INIT'});
 
-    fetch(url)
+    axios
+    .get(url)
     .then(response => response.json())
     // .then(result => {
     //   dispatchStories({
@@ -129,7 +131,7 @@ const App = () => {
     .then(result => {
       dispatchStories({
         type: 'STORIES_FETCH_SUCCESS',
-        payload: result.data.stories,
+        payload: result.data.hits,
       });
       // setStories(result.data.stories);
       // setIsLoading(false);
