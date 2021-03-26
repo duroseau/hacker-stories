@@ -120,7 +120,7 @@ const App = () => {
 
     dispatchStories({ type: 'STORIES_FETCH_INIT'});
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
     .then(response => response.json())
     // .then(result => {
     //   dispatchStories({
@@ -136,15 +136,22 @@ const App = () => {
     })
       .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-      ); 
-  }, [searchTerm]);
+      );
+  }, [url]); 
+  // }, [searchTerm]);
   
 const [searchTerm, setSearchTerm] = useSemiPersistentState(
   'search',
   'React'
-
-const handleSearch = event => { 
+);
+const [url, setUrl] = React.useState(
+  `${API_ENDPOINT}${searchTerm}`
+);
+const handleSearchInput = event => { 
   setSearchTerm(event.taget.value);
+};
+const handleSearchSubmit = () => {
+  setUrl(`${API_ENDPOINT}${searchTerm}`);
 };
 localStorage.setItem('search', event.target.value);
   };
@@ -166,13 +173,17 @@ const searchedStories = stories.data.filter(story =>
     >
       <strong>Search:</strong>
     </InputWithLabel>
-    id='search'
-    value={searchTerm}
-    onInputChange={handleSearch}
+    <button
+    type="button"
+    disabled={!searchTerm}
+    onClick={handleSearchSubmit}
+    >
+      submit
+    </button>
     >
 
-     <Search:
-      </InputWithLabel>
+     
+>
 
     <hr />
     {stories.isError && <p>Something went wrong ...</p>}
@@ -203,7 +214,8 @@ const Search = props => {
        type='text',
        onInputChange ,
        isFocused,
-       children,
+       onInputChange={handleSearchInput}
+       >
       }) => (
         const inputRef = React.useRef();
 
