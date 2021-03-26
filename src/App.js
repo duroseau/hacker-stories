@@ -71,7 +71,7 @@ const Search = props => {
 
   return (
     const Search = ({ search, onSearch }) => (
-      <div>
+      <>
         <label htmlFor="search">Search: </label>
         <input id="search"
           type="text"
@@ -79,7 +79,7 @@ const Search = props => {
           onChange={onSearch} 
           />
 
-      </div>
+      </>
 
     );
     
