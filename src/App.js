@@ -76,11 +76,9 @@ const Search = props => {
         <input id="search"
           type="text"
           value={search}
-          onChange={onSearch} />
+          onChange={onSearch} 
+          />
 
-        <p>
-          Searching for <strong>{searchTerm}</strong>.
-    </p>
       </div>
 
     );
