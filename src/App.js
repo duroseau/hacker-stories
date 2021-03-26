@@ -110,10 +110,16 @@ const App = () => {
   const [isError, setIaError] = React.useState(false);
 
   React.useEffect(() => {
+    if (searchTerm) return;
+
     dispatchStories({ type: 'STORIES_FETCH_INIT'});
 
-
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}${searchTerm}`)
+    .then(response => response.json())
+    // .then(result => {
+    //   dispatchStories({
+    // }
+    // getAsyncStories()
     .then(result => {
       dispatchStories({
         type: 'STORIES_FETCH_SUCCESS',
@@ -125,7 +131,7 @@ const App = () => {
       .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
       ); 
-  }, []);
+  }, [searchTerm]);
   
 const [searchTerm, setSearchTerm] = useSemiPersistentState(
   'search',
@@ -167,7 +173,8 @@ const searchedStories = stories.data.filter(story =>
     {stories.isLoading ? (
       <p>Loading...</p>
     ) : (
-    <List list={searchedStories} onRemoveItem={handleRemoveStory} />
+    <List list={stories.data} onRemoveItem={handleRemoveStory} />
+    )}
   </div>
 
  );
