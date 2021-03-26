@@ -1,5 +1,18 @@
 import React from 'react';
 
+const storiesReducer = (state, action) => {
+  switch (action.type) {
+   case 'SET_STORIES': 
+    return action.payload;
+  case 'REMOVE_STORY':
+    return state.filter(
+      story => action.payload.objectID !== story.objectID
+    );
+  default:
+    throw new Error();
+  }
+  };
+
 const initialStories = [
   {
   title: 'React',
@@ -32,12 +45,23 @@ return [value, setValue];
 return [value, setValue]
 
 const App = () => {
-  const [stories, setStories] = React.useState(initialStories);
+  const [stories, dispatchStories] = React.useReducer(
+   storiesReducer,
+   []
+  );
     const handleRemoveStory = item => {
-      const newStories = stories.filter(
-        story => item.objectID !== story.objectID
+      dispatchStories({
+        type: 'REMOVE_STORY',
+        payload: item,
+      });
+      // const newStories = stories.filter(
+      //   story => item.objectID !== story.objectID
       );
-      setStories(newStories);
+      dispatchStories({
+        type: 'SET_STORIES',
+        payload: newStories,
+      });
+      // setStories(newStories);
     };
     {
       title: 'React',
@@ -64,7 +88,12 @@ const App = () => {
   React.useEffect(() => {
     setIsLoading(true);
 
-    getAsyncStories().then(result => {
+    getAsyncStories()
+    .then(result => {
+      dispatchStories({
+        type: 'SET_STORIES',
+        payload: result.data.stories,
+      });
       setStories(result.data.stories);
       setIsLoading(false);
     })
