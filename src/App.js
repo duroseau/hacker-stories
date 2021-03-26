@@ -58,11 +58,18 @@ const App = () => {
   ]
 
   const [stories, setStories] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isError, setIaError] = React.useState(false);
 
   React.useEffect(() => {
+    setIsLoading(true);
+
     getAsyncStories().then(result => {
       setStories(result.data.stories);
-    });
+      setIsLoading(false);
+    })
+      .catch(() => SpeechSynthesisErrorEvent(true));
+      
   }, []);
   
 const [searchTerm, setSearchTerm] = useSemiPersistentState(
@@ -101,7 +108,10 @@ const searchedStories = stories.filter(story =>
       </InputWithLabel>
 
     <hr />
-
+    {isError && <p>Something went wrong ...</p>}
+    {isLoading ? (
+      <p>Loading...</p>
+    )}
     <List list={searchedStories} onRemoveItem={handleRemoveStory} />
   </div>
 
