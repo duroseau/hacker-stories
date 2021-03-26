@@ -53,6 +53,7 @@ const searchedStories = stories.filter(story =>
       id="search"
       label="search"
       value={searchTerm}
+      isFocused
       onInputChange={handleSearch}
     >
       <strong>Search:</strong>
@@ -89,15 +90,26 @@ const Search = props => {
        value,
        type='text',
        onInputChange ,
+       isFocused,
        children,
       }) => (
+        const inputRef = React.useRef();
+
+        React.useEffect(() => {
+          if (isFocused && inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, [isFocused]);
       <>
         <label htmlFor={id}>{children}: </label>
         &nbsp;
-        <input id={id},
-          type={type},
-          value={search},
-          onChange={onInputChange},
+        <input
+        ref={inputRef}
+        id={id}
+          type={type}
+          value={search}
+          autoFocus={isFocused}
+          onChange={onInputChange}
           />
 
       </>
