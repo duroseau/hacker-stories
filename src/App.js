@@ -3,18 +3,18 @@ import axios from 'axios';
 
 const storiesReducer = (state, action) => {
   switch (action.type) {
-   case 'STORIES_FETCH_INIT': 
-    return {
-      ...state,
-      isLoading: true,
-      isError: false,
-    };
-  case 'STORIES_FETCH_SUCCESS':
-    return {
-      ...state,
-      isLoading:false,
-      isError: true,
-    };
+    case 'STORIES_FETCH_INIT':
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case 'STORIES_FETCH_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
     case 'REMOVE_STORY':
       return {
         ...state,
@@ -22,17 +22,17 @@ const storiesReducer = (state, action) => {
           story => action.payload.objectID !== story.objectID
         ),
       };
-      
-    
-  default:
-    throw new Error();
+
+
+    default:
+      throw new Error();
   }
-  };
+};
 
 const initialStories = [
   {
-  title: 'React',
-  ...
+    title: 'React',
+    ...
   },
   {
     title: 'Redux'
@@ -43,27 +43,27 @@ const initialStories = [
 const getAsyncStories = () =>
   new Promise(resolve =>
     setTimeout(
-      () => resolve({ data: { stories: initialStories }}),
+      () => resolve({ data: { stories: initialStories } }),
       2000
     )
-    
+
   );
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
-  localStorage.getItem('key') || initialState
-   );
-React.useEffect(() => {
-  localStorage.setItem('key', value);
-  fetch(`{API_ENDPOINT}react`)
-  .then(response => response.json())
-  .then(result => {
-    dispatchStories({
-      type: 'STORIES_FETCH_SUCCESS',
-      payload: result.hits,
-    })
-  })
-}, [value, key]);
-return [value, setValue];
+    localStorage.getItem('key') || initialState
+  );
+  React.useEffect(() => {
+    localStorage.setItem('key', value);
+    fetch(`{API_ENDPOINT}react`)
+      .then(response => response.json())
+      .then(result => {
+        dispatchStories({
+          type: 'STORIES_FETCH_SUCCESS',
+          payload: result.hits,
+        })
+      })
+  }, [value, key]);
+  return [value, setValue];
 }, [value]);
 
 return [value, setValue]
@@ -71,57 +71,67 @@ return [value, setValue]
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 const App = () => {
   const [stories, dispatchStories] = React.useReducer(
-   storiesReducer,
-   { data: [], isLoading:false, isError:false }
+    storiesReducer,
+    { data: [], isLoading: false, isError: false }
   );
-    const handleRemoveStory = item => {
-      dispatchStories({
-        type: 'REMOVE_STORY',
-        payload: item,
-      });
+  const handleRemoveStory = item => {
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: item,
+    });
       // const newStories = stories.filter(
       //   story => item.objectID !== story.objectID
       );
-      dispatchStories({
-        type: 'SET_STORIES',
-        payload: newStories,
-      });
+dispatchStories({
+  type: 'SET_STORIES',
+  payload: newStories,
+});
       // setStories(newStories);
     };
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
+{
+  title: 'React',
+    url: 'https://reactjs.org/',
       author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
+        num_comments: 3,
+          points: 4,
+            objectID: 0,
     },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
+{
+  title: 'Redux',
+    url: 'https://redux.js.org/',
       author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
+        num_comments: 2,
+          points: 5,
+            objectID: 1,
     },
   ]
 
-  const [stories, setStories] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIaError] = React.useState(false);
+const [stories, setStories] = React.useState([]);
+const [isLoading, setIsLoading] = React.useState(false);
+const [isError, setIaError] = React.useState(false);
 
-  React.useEffect(() => {
-    handleFetchStories();
-  }, [handleFetchStories]);
-    const handleFetchStories = React.useCallback(() =>{
+React.useEffect(() => {
+  handleFetchStories();
+}, [handleFetchStories]);
+const handleFetchStories = React.useCallback(() => {
 
-    }
-    )
-    if (searchTerm) return;
+}
+)
+if (searchTerm) return;
+const handleFetchStories = React.useCallback(async () => {
+  dispatchStories({ type: 'STORIES_FETCH_INIT' });
+  try {
 
-    dispatchStories({ type: 'STORIES_FETCH_INIT'});
+  } catch {
+    dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
+  }
+  const result = await axios.get(url);
 
-    axios
+  dispatchStories({
+    type: 'STORIES_FETCH_SUCCESS',
+    payload: result.data.hits,
+  });
+  axios
     .get(url)
     .then(response => response.json())
     // .then(result => {
@@ -136,12 +146,12 @@ const App = () => {
       // setStories(result.data.stories);
       // setIsLoading(false);
     })
-      .catch(() => 
+    .catch(() =>
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-      );
-  }, [url]); 
-  // }, [searchTerm]);
-  
+    );
+}, [url]);
+// }, [searchTerm]);
+
 const [searchTerm, setSearchTerm] = useSemiPersistentState(
   'search',
   'React'
@@ -149,7 +159,7 @@ const [searchTerm, setSearchTerm] = useSemiPersistentState(
 const [url, setUrl] = React.useState(
   `${API_ENDPOINT}${searchTerm}`
 );
-const handleSearchInput = event => { 
+const handleSearchInput = event => {
   setSearchTerm(event.taget.value);
 };
 const handleSearchSubmit = () => {
@@ -161,8 +171,8 @@ localStorage.setItem('search', event.target.value);
 const searchedStories = stories.data.filter(story =>
   story.title.toLocaleLowerCase().includes(searchTerm.toLowerCase())
 
-  );
-   return (
+);
+return (
   <div>
     <h1>My Hacker Stories</h1>
 
@@ -176,15 +186,15 @@ const searchedStories = stories.data.filter(story =>
       <strong>Search:</strong>
     </InputWithLabel>
     <button
-    type="button"
-    disabled={!searchTerm}
-    onClick={handleSearchSubmit}
+      type="button"
+      disabled={!searchTerm}
+      onClick={handleSearchSubmit}
     >
       submit
     </button>
     >
 
-     
+
 >
 
     <hr />
@@ -192,11 +202,11 @@ const searchedStories = stories.data.filter(story =>
     {stories.isLoading ? (
       <p>Loading...</p>
     ) : (
-    <List list={stories.data} onRemoveItem={handleRemoveStory} />
+      <List list={stories.data} onRemoveItem={handleRemoveStory} />
     )}
   </div>
 
- );
+);
    };
 const Search = props => {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -211,40 +221,40 @@ const Search = props => {
 
   return (
     const InputWithLabel = ({
-       id,
-       value,
-       type='text',
-       onInputChange ,
-       isFocused,
-       onInputChange={handleSearchInput}
-       >
+    id,
+    value,
+    type = 'text',
+    onInputChange,
+    isFocused,
+    onInputChange = { handleSearchInput }
+    >
       }) => (
         const inputRef = React.useRef();
 
-        React.useEffect(() => {
-          if (isFocused && inputRef.current) {
-            inputRef.current.focus();
-          }
-        }, [isFocused]);
-      <>
-        <label htmlFor={id}>{children}: </label>
+  React.useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+  <>
+    <label htmlFor={id}>{children}: </label>
         &nbsp;
-        <input
-        ref={inputRef}
-        id={id}
-          type={type}
-          value={search}
-          autoFocus={isFocused}
-          onChange={onInputChange}
-          />
+    <input
+      ref={inputRef}
+      id={id}
+      type={type}
+      value={search}
+      autoFocus={isFocused}
+      onChange={onInputChange}
+    />
 
-      </>
+  </>
 
     );
     
   );
 };
-const list = {stories}
+const list = { stories }
 
 const List = ({ list, onRemoveItem }) =>
   list.map(item =>
@@ -262,21 +272,21 @@ const Item = ({ item, onRemoveItem }) => {
   function handleRemoveItem = () => {
     onRemoveItem(item);
   };
-return (
-  <div> 
-    <span>
-      <a href={url}>{title}</a>
-    </span>
-    <span>{author}</span>
-    <span>{num_comments}</span>
-    <span>{points}</span>
-    <span>
-      <button type="button" onClick={onRemoveItem.bind(null, item)}>
-        Dismiss
-      </button> 
-    </span>
-  </div >
-);
+  return (
+    <div>
+      <span>
+        <a href={url}>{title}</a>
+      </span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
+      <span>
+        <button type="button" onClick={onRemoveItem.bind(null, item)}>
+          Dismiss
+      </button>
+      </span>
+    </div >
+  );
 };
 
 
